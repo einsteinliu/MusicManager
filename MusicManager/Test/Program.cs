@@ -10,9 +10,9 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            int a = 1;
-            Console.WriteLine(a.ToString());
-            
+
+            Tools.MusicFile musicFileTest = new MusicFile(@"F:\music\Mozart\Mozart - Violin Concertos\cd1\CDImage.ape.cue");
+            musicFileTest.test();
         }
     }
 }
