@@ -27,7 +27,5 @@ namespace MusicManager
             InitializeComponent();
         }
 
-
-
     }
 }
