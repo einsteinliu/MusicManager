@@ -10,8 +10,8 @@ namespace Test
     {
         static void Main(string[] args)
         {
-
-            Tools.MusicFile musicFileTest = new MusicFile(@"F:\music\Mozart\Mozart - Violin Concertos\cd1\CDImage.ape.cue");
+            string filePath = @"F:\music\Mozart\Mozart - Violin Concertos\cd1\img538.jpg";
+            Tools.MusicFile musicFileTest = new MusicFile(filePath);
             musicFileTest.test();
         }
     }
