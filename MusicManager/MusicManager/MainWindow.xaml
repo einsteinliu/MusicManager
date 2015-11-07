@@ -14,7 +14,14 @@
 
         <TreeView Grid.Column="0" Grid.Row="0" 
                   x:Name="FolderTreeView" 
-                  Margin="10,10,5,10"/>
+                  Margin="10,10,5,10">
+            <TreeView.ContextMenu>
+                <ContextMenu x:Uid="File Explorer">
+                    <MenuItem Header="Add folder"></MenuItem>
+                    <MenuItem Header="Delete"></MenuItem>
+                </ContextMenu>
+            </TreeView.ContextMenu>
+        </TreeView>
         <Label Grid.Column="0" Grid.Row="1" 
                Margin="4,0,10,29" 
                Content="Current IndexPath:" 
@@ -56,6 +63,6 @@
                 Margin="5,0,8,64" 
                 VerticalAlignment="Bottom" Click="buttonOpenMusic_Click" 
                 />
-        <TextBox x:Name="TextBox_IndexFolderPath" Margin="10,64,10,14" Grid.Row="1" TextWrapping="Wrap" Text="F:\music" TextChanged="TextBox_TextChanged"/>
+        <TextBox x:Name="TextBox_IndexFolderPath" Margin="10,64,10,14" Grid.Row="1" TextWrapping="Wrap" Text="F:\music" />
     </Grid>
 </Window>

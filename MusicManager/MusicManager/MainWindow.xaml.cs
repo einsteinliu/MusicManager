@@ -22,6 +22,8 @@ namespace MusicManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        private InputFileTypes userInput = new InputFileTypes("");
+
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +31,8 @@ namespace MusicManager
             TextBox_MusicFileTypesInput.KeyDown += TextBox_MusicFileTypesInput_KeyDown;
             //删除文件夹
             this.KeyDown += MainWindow_KeyDown;
+            //鼠标右键菜单 打开fileExplorer
+
 
         }
 
@@ -60,6 +64,7 @@ namespace MusicManager
             }
         }
 
+        //
         private string _fileTypes;
         public string FileTypes
         {
@@ -95,7 +100,7 @@ namespace MusicManager
                 TextBox_MusicFileTypesInput.Text = FileTypes;
                 //文件后缀名列表
                 List<string> fileTypes = new List<string>();
-                InputFileTypes userInput = new InputFileTypes(FileTypes);
+                userInput = new InputFileTypes(FileTypes);
                 fileTypes = userInput.FileTypesList;
 
 
@@ -132,10 +137,10 @@ namespace MusicManager
         {
             if (e.Key == Key.Enter)
             {
-                InputFileTypes userInputChanged = new InputFileTypes(TextBox_MusicFileTypesInput.Text);
-                //to be continued...
+                string text = TextBox_MusicFileTypesInput.Text;
+                userInput = new InputFileTypes(TextBox_MusicFileTypesInput.Text);
+                File.WriteAllText(_fileTypes_FileName, text);
             }
-            
             //throw new NotImplementedException();
         }
 
@@ -159,6 +164,7 @@ namespace MusicManager
             
         }
 
+        //
         private void buttonModifyIndex_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
