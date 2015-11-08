@@ -164,10 +164,11 @@ namespace MusicManager
             
         }
 
-        //
-        private void buttonModifyIndex_Click(object sender, RoutedEventArgs e)
+
+        private void MenuItem_AddFolder_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            //MessageBox.Show("menuItem Click");
+             var dialog = new System.Windows.Forms.FolderBrowserDialog();
             //
             List<string> selectedFolderPaths = new List<string>();
 
@@ -179,11 +180,8 @@ namespace MusicManager
                 selectedFolderPaths.Add(path);
                 //ListDirectory(FolderTreeView, path);
             }
+
         }
-
-
-
-
 
     }
 

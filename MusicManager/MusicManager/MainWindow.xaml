@@ -8,8 +8,8 @@
             <ColumnDefinition Width="22*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="369*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="425*"/>
+            <RowDefinition Height="44*"/>
         </Grid.RowDefinitions>
 
         <TreeView Grid.Column="0" Grid.Row="0" 
@@ -17,52 +17,29 @@
                   Margin="10,10,5,10">
             <TreeView.ContextMenu>
                 <ContextMenu x:Uid="File Explorer">
-                    <MenuItem Header="Add folder"></MenuItem>
+                    <MenuItem Header="Add folder" Click="MenuItem_AddFolder_Click"></MenuItem>
                     <MenuItem Header="Delete"></MenuItem>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <Label Grid.Column="0" Grid.Row="1" 
-               Margin="4,0,10,29" 
-               Content="Current IndexPath:" 
-               Height="33"
-               VerticalAlignment="Bottom"
-               />
-        <Button Grid.Column="0" Grid.Row="1" 
-                x:Name="buttonModifyIndex" 
-                Content="Add Folder" 
-                Margin="10,0,0,64" 
-                Height="27" 
-                VerticalAlignment="Bottom" 
-                HorizontalAlignment="Left" Width="279" Click="buttonModifyIndex_Click"
-                />
         <DataGrid Grid.Column="1" Grid.Row="0" 
                   Margin="5,10,10,10" 
                   MinWidth="483" 
                   MinHeight="349"
                   />
-        <TextBox x:Name="TextBox_MusicFileTypesInput" Grid.Column="1" Grid.Row="1" 
-                 Margin="5,0,10,14" 
-                 Height="22" 
+        <TextBox x:Name="TextBox_MusicFileTypesInput" 
+                 Margin="10,0,5,10" 
+                 Height="27" 
                  TextWrapping="Wrap" 
                  Text="ape, cue, mp3" 
-                 VerticalAlignment="Bottom" 
+                 VerticalAlignment="Bottom" Grid.Row="1" 
                  />
-        <Label Grid.Column="1" Grid.Row="1" 
-               Content="Filetypes : " 
-               HorizontalAlignment="Left" 
-               Height="33" 
-               Margin="5,0,0,29" 
-               VerticalAlignment="Bottom" 
-               Width="200" 
-               />
-        <Button Grid.Column="1"  Grid.Row="1" 
+        <Button Grid.Column="1" 
                 x:Name="buttonOpenMusic" 
                 Content="AirPlay" 
                 Height="27" 
-                Margin="5,0,8,64" 
-                VerticalAlignment="Bottom" Click="buttonOpenMusic_Click" 
+                Margin="5,0,10,10" 
+                VerticalAlignment="Bottom" Click="buttonOpenMusic_Click" Grid.Row="1" 
                 />
-        <TextBox x:Name="TextBox_IndexFolderPath" Margin="10,64,10,14" Grid.Row="1" TextWrapping="Wrap" Text="F:\music" />
     </Grid>
 </Window>
