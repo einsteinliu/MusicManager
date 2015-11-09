@@ -28,13 +28,15 @@ namespace MusicManager
         {
             InitializeComponent();
             initDefaultSettings();
+
+
             TextBox_MusicFileTypesInput.KeyDown += TextBox_MusicFileTypesInput_KeyDown;
             //删除文件夹
             this.KeyDown += MainWindow_KeyDown;
             //鼠标右键菜单 打开fileExplorer
 
-
         }
+
 
 
 
@@ -81,11 +83,10 @@ namespace MusicManager
         private void initDefaultSettings()
         {
             TreeDB_FileName = "TreeDB.txt";
-
             if (File.Exists(TreeDB_FileName))
             {
-                //MessageBox.Show("Tree exists");
-                initTree();
+                //
+                initTreeView();
             }
             else
             {
@@ -102,8 +103,8 @@ namespace MusicManager
                 List<string> fileTypes = new List<string>();
                 userInput = new InputFileTypes(FileTypes);
                 fileTypes = userInput.FileTypesList;
-
-
+                //
+                //
                 initDataGrid();
             }
             else
@@ -114,10 +115,18 @@ namespace MusicManager
 
 
         //
-        private void initTree()
+        private FolderTreeClass _folderTree = new FolderTreeClass(new List<string>());
+        public FolderTreeClass FolderTree
         {
-            
-            
+            get
+            {
+                return _folderTree;
+            }
+        }
+        private void initTreeView()
+        {
+            List<string> treeDB_FolderPaths = File.ReadAllLines(TreeDB_FileName).ToList();
+            _folderTree = new FolderTreeClass(treeDB_FolderPaths);
             
         }
 
@@ -180,6 +189,8 @@ namespace MusicManager
                 selectedFolderPaths.Add(path);
                 //ListDirectory(FolderTreeView, path);
             }
+
+
 
         }
 
