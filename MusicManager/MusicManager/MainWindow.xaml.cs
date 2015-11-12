@@ -27,18 +27,17 @@ namespace MusicManager
         public MainWindow()
         {
             InitializeComponent();
+            //读入之前的文档,建立树。要不要建立之前的播放列表再议。
             initDefaultSettings();
 
-
+            //添加事件: 音乐格式筛选TextBox事件。
             TextBox_MusicFileTypesInput.KeyDown += TextBox_MusicFileTypesInput_KeyDown;
-            //删除文件夹
+            //添加事件: 删除文件夹
             this.KeyDown += MainWindow_KeyDown;
-            //鼠标右键菜单 打开fileExplorer
+            //鼠标右键菜单 打开fileExplorer,系统默认
+
 
         }
-
-
-
 
         private string _treeDB_FileName;
         public string TreeDB_FileName
@@ -115,8 +114,8 @@ namespace MusicManager
 
 
         //
-        private FolderTreeClass _folderTree = new FolderTreeClass(new List<string>());
-        public FolderTreeClass FolderTree
+        private SubfoldersClass _folderTree = new SubfoldersClass(new List<string>());
+        public SubfoldersClass FolderTree
         {
             get
             {
@@ -126,7 +125,7 @@ namespace MusicManager
         private void initTreeView()
         {
             List<string> treeDB_FolderPaths = File.ReadAllLines(TreeDB_FileName).ToList();
-            _folderTree = new FolderTreeClass(treeDB_FolderPaths);
+            _folderTree = new SubfoldersClass(treeDB_FolderPaths);
             
         }
 
@@ -195,5 +194,6 @@ namespace MusicManager
         }
 
     }
+
 
 }

@@ -11,13 +11,12 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            //测试SubfolderClass
             List<string> temp = new List<string>();
-            temp.Add(@"F:\music\Mozart\Mozart - Violin Concertos\cd1");
+            temp.Add(@"F:\music\Mozart\Mozart - Violin Concertos");
             temp.Add(@"F:\music\Mozart-Requiem-Bernstein (APE)");
-            
-            FolderTreeClass ftc = new FolderTreeClass(temp);
-
-            //
+            SubfoldersClass ftc = new SubfoldersClass(temp);
+            ftc.test();
 
 
             //假设这是返回的被选择的文件夹路径List
@@ -46,9 +45,10 @@ namespace Test
                     Console.WriteLine();
                 }
             }
-            string filePath = @"F:\music\Mozart\Mozart - Violin Concertos\cd1\img538.jpg";
+            string filePath = @"F:\music\Bach\Bach.-.[Goldberg.Variations(Walcha.EMI.Angle)].专辑.(Flac)\033 Aria.mp3";
             Tools.MusicFile musicFileTest = new MusicFile(filePath);
             musicFileTest.test();
+            Console.WriteLine(musicFileTest.MusicDuration);
         }
     }
 }
