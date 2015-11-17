@@ -18,7 +18,6 @@ namespace Test
             SubfoldersClass ftc = new SubfoldersClass(temp);
             ftc.test();
 
-
             //假设这是返回的被选择的文件夹路径List
             ftc.TargetFolderPaths = temp;
 

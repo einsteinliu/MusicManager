@@ -36,9 +36,8 @@ namespace MusicManager
             this.KeyDown += MainWindow_KeyDown;
             //鼠标右键菜单 打开fileExplorer,系统默认
 
-
         }
-
+        //存文件树的文件路径
         private string _treeDB_FileName;
         public string TreeDB_FileName
         {
@@ -51,7 +50,7 @@ namespace MusicManager
                 _treeDB_FileName = value;
             }
         }
-
+        //存文件格式的文件路径
         private string _fileTypes_FileName;
         public string FileTypes_FileName
         {
@@ -64,8 +63,7 @@ namespace MusicManager
                 _fileTypes_FileName = value;
             }
         }
-
-        //
+        //文件格式
         private string _fileTypes;
         public string FileTypes
         {
@@ -78,30 +76,44 @@ namespace MusicManager
                 return _fileTypes;
             }
         }
+        //文件树的数据库
+        private SubfoldersClass _folderTree = new SubfoldersClass(new List<string>());
+        public SubfoldersClass FolderTree
+        {
+            get
+            {
+                return _folderTree;
+            }
+        }
 
+
+
+        //////////////////////////////////////////////
+        //初始化 文件树函数 和 播放列表函数
         private void initDefaultSettings()
         {
             TreeDB_FileName = "TreeDB.txt";
+            //如果文件树文件存在, 则根据文件树文件建立树。 如果不存在,那么新建文件树文件。
             if (File.Exists(TreeDB_FileName))
             {
-                //
                 initTreeView();
             }
             else
             {
                 File.Create(TreeDB_FileName);
             }
-
+            //如果 存储文件类型文件存在, 则读取信息。 如果 不存在, 则新建文件类型文件。
             FileTypes_FileName = "FileTypes.txt";
             if (File.Exists(FileTypes_FileName))
             {
+                //将FileTypes_File.txt内文件类型数据存入变量_fileTypes内,并且显示在窗口的TextBox内。
                 FileTypes = File.ReadAllText(FileTypes_FileName);
-                //TextBox内文字显示FileTypes_File.txt内文件内容
                 TextBox_MusicFileTypesInput.Text = FileTypes;
                 //文件后缀名列表
-                List<string> fileTypes = new List<string>();
-                userInput = new InputFileTypes(FileTypes);
-                fileTypes = userInput.FileTypesList;
+                //List<string> fileTypes = new List<string>();
+                //userInput = new InputFileTypes(FileTypes);
+                //fileTypes = userInput.FileTypesList;
+                List<string> fileTypesList = new InputFileTypes(FileTypes).FileTypesList;//这里可以吧InputFileTypes改成工具类
                 //
                 //
                 initDataGrid();
@@ -111,24 +123,63 @@ namespace MusicManager
                 File.Create(FileTypes_FileName);
             }           
         }
-
-
-        //
-        private SubfoldersClass _folderTree = new SubfoldersClass(new List<string>());
-        public SubfoldersClass FolderTree
-        {
-            get
-            {
-                return _folderTree;
-            }
-        }
+       
         private void initTreeView()
         {
-            List<string> treeDB_FolderPaths = File.ReadAllLines(TreeDB_FileName).ToList();
-            _folderTree = new SubfoldersClass(treeDB_FolderPaths);
-            
+            //List<string> treeDB_FolderPaths = File.ReadAllLines(TreeDB_FileName).ToList();
+            //_folderTree = new SubfoldersClass(treeDB_FolderPaths);
+            List<string> folderPaths = new List<string>(initFoldePaths());
+            var nodes = FolderTreeView.Items;
+            for (int i = 0; i < folderPaths.Count; i++)
+            {
+                ListDirectory(FolderTreeView, folderPaths[i]);
+            }     
         }
 
+        private void ListDirectory(TreeView treeView, string path)
+        {
+            var rootDirectoryInfo = new DirectoryInfo(path);
+            treeView.Items.Add(CreateDirectoryNode(rootDirectoryInfo));
+        }
+
+        private TreeViewItem CreateDirectoryNode(DirectoryInfo directoryInfo)
+        {
+            //建立一个StackPanel 来存 CheckBox和TextBlock
+            StackPanel sp = new StackPanel();
+            CheckBox cb = new CheckBox();
+            TextBlock tb = new TextBlock();
+            tb.Text = directoryInfo.Name;
+            sp.Children.Add(cb);
+            sp.Children.Add(tb);
+            sp.Orientation = Orientation.Horizontal;
+            cb.Click += cb_Click;
+            TreeViewItem directoryNode = new TreeViewItem() { Header = sp };
+
+            foreach (var directory in directoryInfo.GetDirectories())
+            {
+                directoryNode.Items.Add(CreateDirectoryNode(directory));
+            }
+            //**************
+            //FileInfo fi = directoryInfo.GetFiles()[0];
+            //显示下面的文件
+            //foreach (var file in directoryInfo.GetFiles())
+            //{
+            //    directoryNode.Items.Add(new TreeViewItem() { Header = file.Name });
+            //}
+            return directoryNode;
+        }
+
+        public List<string> initFoldePaths()
+        {
+            List<string> fps = new List<string>();
+            //这里需要加入一个filebrowser用于添加目录到这个folderPath内,此处先偷懒。
+            fps.Add(@"F:\music");
+            fps.Add(@"E:\Google Drive\C#");
+            return fps;
+        }
+
+
+        Dictionary<CheckBox, TreeViewItem> dic = new Dictionary<CheckBox, TreeViewItem>();  
 
         //
         private void initDataGrid()
@@ -139,8 +190,6 @@ namespace MusicManager
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void TextBox_MusicFileTypesInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -182,17 +231,19 @@ namespace MusicManager
 
             while (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string path = dialog.SelectedPath;
-                
+                string path = dialog.SelectedPath;      
                 //
                 selectedFolderPaths.Add(path);
-                //ListDirectory(FolderTreeView, path);
+                ListDirectory(FolderTreeView, path);
             }
-
-
-
         }
 
+        void cb_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(sender.ToString());
+            
+            //throw new NotImplementedException();
+        }
     }
 
 
