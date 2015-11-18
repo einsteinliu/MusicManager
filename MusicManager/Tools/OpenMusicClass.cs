@@ -39,8 +39,6 @@ namespace Tools
         public List<MusicFile> MusicFiles { get; set; }
 
 
-
-
         //类测试函数
         public void test()
         {

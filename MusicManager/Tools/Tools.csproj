@@ -48,6 +48,7 @@
     <Compile Include="FolderSubfoldersClass.cs" />
     <Compile Include="OpenMusicClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SteinFolders.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

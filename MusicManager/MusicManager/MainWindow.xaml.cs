@@ -86,8 +86,6 @@ namespace MusicManager
             }
         }
 
-
-
         //////////////////////////////////////////////
         //初始化 文件树函数 和 播放列表函数
         private void initDefaultSettings()
@@ -154,7 +152,7 @@ namespace MusicManager
             sp.Orientation = Orientation.Horizontal;
             cb.Click += cb_Click;
             TreeViewItem directoryNode = new TreeViewItem() { Header = sp };
-
+            directoryNode.Selected += directoryNode_Selected;
             foreach (var directory in directoryInfo.GetDirectories())
             {
                 directoryNode.Items.Add(CreateDirectoryNode(directory));
@@ -167,6 +165,11 @@ namespace MusicManager
             //    directoryNode.Items.Add(new TreeViewItem() { Header = file.Name });
             //}
             return directoryNode;
+        }
+
+        void directoryNode_Selected(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         public List<string> initFoldePaths()

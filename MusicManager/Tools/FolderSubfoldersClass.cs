@@ -167,8 +167,6 @@ namespace Tools
     }
 
 
-
-
     //按照输入的文件后缀名 筛选 指定文件夹内 拥有相应后缀名的文件
     //输入:string fileTypes, targetFolder
     //输出:List<string> FilePaths, string Key
@@ -183,9 +181,6 @@ namespace Tools
         {
             setFileNames(fileTypesList, targetDirectory);
         }
-
-
-
 
         private List<string> _fileNames;
         public List<string> FileNames
@@ -250,8 +245,6 @@ namespace Tools
         }
         //
     }
-
-
 
     //这部分需要存储
     public class InputFileTypes

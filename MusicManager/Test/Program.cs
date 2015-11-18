@@ -11,6 +11,8 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            testSteinFolder();
+
             //测试SubfolderClass
             List<string> temp = new List<string>();
             temp.Add(@"F:\music\Mozart\Mozart - Violin Concertos");
@@ -48,6 +50,13 @@ namespace Test
             Tools.MusicFile musicFileTest = new MusicFile(filePath);
             musicFileTest.test();
             Console.WriteLine(musicFileTest.MusicDuration);
+        }
+
+        static void testSteinFolder()
+        {
+            SteinFolders stF = new SteinFolders();
+            List<FileInfo> files = stF.extractFilteredFileList(new DirectoryInfo(@"C:\BaiduCloudDownload\classic"));
+            string folder = files[0].Directory.FullName;
         }
     }
 }

@@ -22,7 +22,8 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <DataGrid Grid.Column="1" Grid.Row="0" 
+        <DataGrid Name="Playlist"
+                  Grid.Column="1" Grid.Row="0" 
                   Margin="5,10,10,10" 
                   MinWidth="483" 
                   MinHeight="349"
