@@ -11,6 +11,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            testSteinAirPlay();
             testSteinFolder();
 
             //测试SubfolderClass
@@ -57,6 +58,11 @@ namespace Test
             SteinFolders stF = new SteinFolders();
             List<FileInfo> files = stF.extractFilteredFileList(new DirectoryInfo(@"C:\BaiduCloudDownload\classic"));
             string folder = files[0].Directory.FullName;
+        }
+        static void testSteinAirPlay()
+        {
+            SteinAirPlay airplay = new SteinAirPlay();
+            airplay.writeLocalListFile();
         }
     }
 }
