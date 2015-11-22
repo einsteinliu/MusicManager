@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 using Tools;
 
 namespace MusicManager
@@ -23,7 +26,15 @@ namespace MusicManager
     public partial class MainWindow : Window
     {
         private InputFileTypes userInput = new InputFileTypes("");
-
+        private Dictionary<CheckBox, DirectoryInfo> nodesDir = new Dictionary<CheckBox, DirectoryInfo>();
+        private SteinFolders steinFolder = new SteinFolders();
+        private SteinAirPlay steinAirPlay = new SteinAirPlay();
+        private string localListFile = @"E:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
+        Process airPlayProcess = null;
+        IntPtr airPlayWndH;
+        IntPtr mainwinWndH;
+        Thread updatePosThread;
+        Rect myRect = new Rect();
         public MainWindow()
         {
             InitializeComponent();
@@ -34,8 +45,34 @@ namespace MusicManager
             TextBox_MusicFileTypesInput.KeyDown += TextBox_MusicFileTypesInput_KeyDown;
             //添加事件: 删除文件夹
             this.KeyDown += MainWindow_KeyDown;
+            this.Closed += MainWindow_Closed;
+            mainwinWndH = Process.GetCurrentProcess().MainWindowHandle;
+            updatePosThread = new Thread(updateAirplayPos);
+            updatePosThread.Start();
             //鼠标右键菜单 打开fileExplorer,系统默认
+        }
 
+        void updateAirplayPos()
+        {
+            while (true)
+            {
+                //Thread.Sleep(0);
+                if ((airPlayProcess != null) && (!airPlayProcess.HasExited))
+                {
+                    GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
+                    SetWindowPos(airPlayWndH, 0, myRect.Left+5, myRect.Bottom-10, myRect.Right-myRect.Left-10, 100, SWP_SHOWWINDOW);
+                }
+            }
+
+        }
+
+        void MainWindow_Closed(object sender, EventArgs e)
+        {
+            updatePosThread.Abort();
+            if ((airPlayProcess != null)&&(!airPlayProcess.HasExited))
+            {
+                airPlayProcess.CloseMainWindow();
+            }
         }
         //存文件树的文件路径
         private string _treeDB_FileName;
@@ -152,7 +189,10 @@ namespace MusicManager
             sp.Orientation = Orientation.Horizontal;
             cb.Click += cb_Click;
             TreeViewItem directoryNode = new TreeViewItem() { Header = sp };
+            nodesDir[cb] = directoryInfo;
+            cb.Checked += cb_Checked;
             directoryNode.Selected += directoryNode_Selected;
+            
             foreach (var directory in directoryInfo.GetDirectories())
             {
                 directoryNode.Items.Add(CreateDirectoryNode(directory));
@@ -167,18 +207,67 @@ namespace MusicManager
             return directoryNode;
         }
 
+        void cb_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox selectedNode = sender as CheckBox;
+            DirectoryInfo selectedDir = nodesDir[selectedNode];
+            List<FileInfo> files = steinFolder.extractFilteredFileList(selectedDir);
+            List<Track> tracks = new List<Track>();
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (files[i].Extension.ToUpper() == ".CUE")
+                {
+                    List<Track> cueTracks = steinFolder.extractTracksFromCue(files[i].FullName);
+                    if (cueTracks.Count > 0)
+                    {
+                        tracks.AddRange(cueTracks);
+                    }
+                }
+                else
+                {
+                    tracks.Add(steinFolder.extrackTrackFromFile(files[i]));
+                }
+            }
+            steinAirPlay.playList.Tracks.Clear();
+            steinAirPlay.playList.Tracks.AddRange(tracks);
+            steinAirPlay.writeLocalListFile(localListFile);
+        }
+
         void directoryNode_Selected(object sender, RoutedEventArgs e)
         {
-            
+            //TreeViewItem selectedNode = sender as TreeViewItem;
+            //DirectoryInfo selectedDir = nodesDir[selectedNode];
+            //List<FileInfo> files = steinFolder.extractFilteredFileList(selectedDir);
+            //List<Track> tracks = new List<Track>();
+            //for (int i = 0; i < files.Count; i++)
+            //{
+            //    if (files[i].Extension.ToUpper() == ".CUE")
+            //    {
+            //        List<Track> cueTracks = steinFolder.extractTracksFromCue(files[i].FullName);
+            //        if (cueTracks.Count > 0)
+            //        {
+            //            tracks.AddRange(cueTracks);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        tracks.Add(steinFolder.extrackTrackFromFile(files[i]));
+            //    }
+            //}
+            //steinAirPlay.playList.Tracks.Clear();
+            //steinAirPlay.playList.Tracks.AddRange(tracks);
+            //steinAirPlay.writeLocalListFile(localListFile);
+
         }
 
         public List<string> initFoldePaths()
         {
-            List<string> fps = new List<string>();
-            //这里需要加入一个filebrowser用于添加目录到这个folderPath内,此处先偷懒。
-            fps.Add(@"F:\music");
-            fps.Add(@"E:\Google Drive\C#");
-            return fps;
+            //List<string> fps = new List<string>();
+            ////这里需要加入一个filebrowser用于添加目录到这个folderPath内,此处先偷懒。
+            //fps.Add(@"F:\music");
+            //fps.Add(@"E:\Google Drive\C#");
+
+            return File.ReadAllLines("TreeDB.txt").ToList() ;
         }
 
 
@@ -218,10 +307,29 @@ namespace MusicManager
 
         }
 
-
+        [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
+        [DllImport("user32.dll", EntryPoint = "GetWindowRect")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+        const int SWP_SHOWWINDOW = 0x0040;
+        public struct Rect
+        {
+            public int Left { get; set; }
+            public int Top { get; set; }
+            public int Right { get; set; }
+            public int Bottom { get; set; }
+        }
         private void buttonOpenMusic_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (airPlayProcess == null)
+            {
+                GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
+                string airplay = @"E:\备份\难得的软件\AIRPLAY.exe";
+                airPlayProcess = Process.Start(airplay);
+                System.Threading.Thread.Sleep(1000);
+                airPlayWndH = airPlayProcess.MainWindowHandle;
+                SetWindowPos(airPlayWndH, 0, myRect.Left, myRect.Bottom, 800, 100, SWP_SHOWWINDOW);
+            }
         }
 
 
@@ -237,14 +345,13 @@ namespace MusicManager
                 string path = dialog.SelectedPath;      
                 //
                 selectedFolderPaths.Add(path);
+                File.WriteAllLines("TreeDB.txt", selectedFolderPaths.ToArray());
                 ListDirectory(FolderTreeView, path);
             }
         }
 
         void cb_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(sender.ToString());
-            
             //throw new NotImplementedException();
         }
     }

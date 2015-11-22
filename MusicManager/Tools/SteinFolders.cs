@@ -31,6 +31,24 @@ namespace Tools
             return currFileList;
         }
 
+        public Track extrackTrackFromFile(FileInfo file)
+        {
+            Track track = new Track();
+            TagLib.File tagFile = TagLib.File.Create(file.FullName);
+            track.album = file.DirectoryName;
+            if (track.album.Length < 6)
+                track.album = file.Directory.Parent.Name;
+            track.begin = -1;
+            track.end = -1;
+            track.duration = (int)(tagFile.Properties.Duration.TotalMilliseconds);
+            track.filename = file.FullName;
+            track.title = file.Name;
+            track.track_index = 0;
+            track.track_total = 0;
+            track.artist = "";
+            return track;
+        }
+
         public List<Track> extractTracksFromCue(string cueFile)
         {
             List<Track> tracks = new List<Track>();

@@ -36,8 +36,11 @@ namespace Tools
             initAPlayList();
         }
 
-        public void writeLocalListFile()
+        public void writeLocalListFile(string localFile = "")
         {
+            if (localFile.Length > 3)
+                localListFile = localFile;
+
             string localListFileContent = "{\"focus\":" + playList.focus.ToString() + ",";
             localListFileContent += "\"tracks\":[";
             for (int i = 0; i < playList.Tracks.Count;i++ )
