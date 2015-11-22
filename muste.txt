@@ -1,0 +1,1 @@
+{"focus":x,"tracks":[{"album":"x","album_pic":"","artist":"x","artist_pic":"","begin":sec/-1,"duration":sec,"end":sec/-1,"filename":"D:\\xxx","flag":0,"lyric":"","lyric_off":0,"package":"","title":"xxx","track_index":xx,"track_total":xxx},{},{},{}]}

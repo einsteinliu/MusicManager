@@ -56,8 +56,15 @@ namespace Test
         static void testSteinFolder()
         {
             SteinFolders stF = new SteinFolders();
-            List<FileInfo> files = stF.extractFilteredFileList(new DirectoryInfo(@"C:\BaiduCloudDownload\classic"));
-            string folder = files[0].Directory.FullName;
+            //List<Track> tracks = stF.extractTracksFromCue(@"Glenn.Gould.-.[CD06.Beethoven.Piano.concerto.No1.Bach.Keyboard.concerto.No5].专辑.(FLAC).cue");
+            List<Track> tracks = stF.extractTracksFromCue(@"CDImage.cue");
+
+            SteinAirPlay airplay = new SteinAirPlay();
+            airplay.playList.Tracks.AddRange(tracks);
+            airplay.writeLocalListFile();
+            
+            //List<FileInfo> files = stF.extractFilteredFileList(new DirectoryInfo(@"C:\BaiduCloudDownload\classic"));
+            //string folder = files[0].Directory.FullName;
         }
         static void testSteinAirPlay()
         {

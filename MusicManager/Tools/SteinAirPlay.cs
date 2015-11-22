@@ -20,7 +20,7 @@ namespace Tools
         public int track_index;
         public int track_total;
     }
-    struct PlayList
+    public struct PlayList
     {
         public int focus;
         public List<Track> Tracks;
@@ -28,7 +28,7 @@ namespace Tools
 
     public class SteinAirPlay
     {
-        PlayList playList = new PlayList();
+        public PlayList playList = new PlayList();
         string localListFile = "audition.locallist";
         
         public SteinAirPlay()
@@ -79,19 +79,19 @@ namespace Tools
 
         void initAPlayList()
         {
-            playList.focus = 2;
+            playList.focus = 0;
             playList.Tracks = new List<Track>();
-            Track track1 = new Track();
-            track1.album = "test album1";
-            track1.artist = "test artist1";
-            track1.begin = -1;
-            track1.duration = 30000;
-            track1.end = -1;
-            track1.filename = "xxx.mp3";
-            track1.title = "Arial";
-            track1.track_index = 0;
-            track1.track_total = 2;
-            playList.Tracks.Add(track1);
+            //Track track1 = new Track();
+            //track1.album = "test album1";
+            //track1.artist = "test artist1";
+            //track1.begin = -1;
+            //track1.duration = 30000;
+            //track1.end = -1;
+            //track1.filename = "xxx.mp3";
+            //track1.title = "Arial";
+            //track1.track_index = 0;
+            //track1.track_total = 2;
+            //playList.Tracks.Add(track1);
         }
     }
 }
