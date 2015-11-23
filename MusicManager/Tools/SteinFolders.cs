@@ -35,13 +35,13 @@ namespace Tools
         {
             Track track = new Track();
             TagLib.File tagFile = TagLib.File.Create(file.FullName);
-            track.album = file.DirectoryName;
+            track.album = file.Directory.Name;
             if (track.album.Length < 6)
                 track.album = file.Directory.Parent.Name;
             track.begin = -1;
             track.end = -1;
             track.duration = (int)(tagFile.Properties.Duration.TotalMilliseconds);
-            track.filename = file.FullName;
+            track.filename = file.FullName.Replace("\\","\\\\");
             track.title = file.Name;
             track.track_index = 0;
             track.track_total = 0;

@@ -36,6 +36,30 @@ namespace Tools
             initAPlayList();
         }
 
+        public void resetSystemConfig(string systemConfig)
+        {
+            string config = File.ReadAllText(systemConfig);
+            config = setSystemConfigKeyValue(config, "\"track\":", ",\"type\":");
+            config = setSystemConfigKeyValue(config, "\"offset\":", ",\"owner\":", "100");
+            File.WriteAllText(systemConfig, config);
+            //string config = File.ReadAllText(systemConfig);
+            //int posTrack = config.IndexOf("\"track\":")+8;
+            //int posType = config.IndexOf(",\"type\":");
+            //config = config.Remove(posTrack, posType - posTrack);
+            //config = config.Insert(posTrack, "0");
+            //File.WriteAllText(systemConfig, config);
+        }
+
+        public string setSystemConfigKeyValue(string config,string keyFront, string keyAfter, string value = "0")
+        {
+            int posTrack = config.IndexOf(keyFront) + keyFront.Length;
+            int posType = config.IndexOf(keyAfter);
+            string sub = config.Substring(posTrack, posType - posTrack);
+            config = config.Remove(posTrack, posType - posTrack);
+            config = config.Insert(posTrack, value);
+            return config;
+        }
+
         public void writeLocalListFile(string localFile = "")
         {
             if (localFile.Length > 3)

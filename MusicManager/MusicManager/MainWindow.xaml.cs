@@ -30,6 +30,7 @@ namespace MusicManager
         private SteinFolders steinFolder = new SteinFolders();
         private SteinAirPlay steinAirPlay = new SteinAirPlay();
         private string localListFile = @"E:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
+        private string systemConfig = @"E:\备份\难得的软件\AIRPLAY_CONFIG\SYSTEM\CONFIG";
         Process airPlayProcess = null;
         IntPtr airPlayWndH;
         IntPtr mainwinWndH;
@@ -151,12 +152,12 @@ namespace MusicManager
                 List<string> fileTypesList = new InputFileTypes(FileTypes).FileTypesList;//这里可以吧InputFileTypes改成工具类
                 //
                 //
-                initDataGrid();
             }
             else
             {
                 File.Create(FileTypes_FileName);
-            }           
+            }
+            initDataGrid();
         }
        
         private void initTreeView()
@@ -167,6 +168,7 @@ namespace MusicManager
             var nodes = FolderTreeView.Items;
             for (int i = 0; i < folderPaths.Count; i++)
             {
+                
                 ListDirectory(FolderTreeView, folderPaths[i]);
             }     
         }
@@ -174,7 +176,11 @@ namespace MusicManager
         private void ListDirectory(TreeView treeView, string path)
         {
             var rootDirectoryInfo = new DirectoryInfo(path);
-            treeView.Items.Add(CreateDirectoryNode(rootDirectoryInfo));
+            DirectoryInfo[] subDirs = rootDirectoryInfo.GetDirectories();
+            for (int i = 0; i < subDirs.Length; i++)
+            {
+                treeView.Items.Add(CreateDirectoryNode(subDirs[i]));
+            }
         }
 
         private TreeViewItem CreateDirectoryNode(DirectoryInfo directoryInfo)
@@ -228,9 +234,11 @@ namespace MusicManager
                     tracks.Add(steinFolder.extrackTrackFromFile(files[i]));
                 }
             }
-            steinAirPlay.playList.Tracks.Clear();
+            //steinAirPlay.playList.Tracks.Clear();
             steinAirPlay.playList.Tracks.AddRange(tracks);
             steinAirPlay.writeLocalListFile(localListFile);
+            steinAirPlay.resetSystemConfig(systemConfig);
+            addDataGridItems(steinAirPlay.playList.Tracks);
         }
 
         void directoryNode_Selected(object sender, RoutedEventArgs e)
@@ -276,7 +284,29 @@ namespace MusicManager
         //
         private void initDataGrid()
         {
-           
+            addDataGridColumn("track",40);
+            addDataGridColumn("album",250);
+            addDataGridColumn("title",150);
+            addDataGridColumn("duration",40);
+        }
+
+        private void addDataGridColumn(string name, int width=100)
+        {
+            DataGridTextColumn column = new DataGridTextColumn();
+            column.Header = name;
+            column.Binding = new Binding(name);
+            column.Width = width;
+            Playlist.Columns.Add(column);
+        }
+
+        public void addDataGridItems(List<Track> tracks)
+        {
+            int alreadyAddedItems = Playlist.Items.Count;
+            for(int i=0;i<tracks.Count;i++)
+            {
+                Track currTrack = tracks[i];
+                Playlist.Items.Add(new DataGridItem() {track = i+alreadyAddedItems,title = currTrack.title,album = currTrack.album,duration = TimeSpan.FromMilliseconds(currTrack.duration).ToString("mm\\:ss")});
+            }
         }
 
         /// <summary>
@@ -332,7 +362,6 @@ namespace MusicManager
             }
         }
 
-
         private void MenuItem_AddFolder_Click(object sender, RoutedEventArgs e)
         {
             //MessageBox.Show("menuItem Click");
@@ -356,5 +385,11 @@ namespace MusicManager
         }
     }
 
-
+    public class DataGridItem
+    {
+        public int track{ get; set; }
+        public string title{ get; set; }
+        public string album{ get; set; }
+        public string duration{ get; set; }
+    }
 }

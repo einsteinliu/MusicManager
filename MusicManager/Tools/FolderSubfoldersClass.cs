@@ -39,9 +39,6 @@ namespace Tools
                 Console.WriteLine();
                 Console.WriteLine();
             }
-
-
-
         }
 
         public SubfoldersClass(List<string> folderPathList)
