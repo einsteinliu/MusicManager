@@ -337,11 +337,7 @@ namespace MusicManager
 
         }
 
-        [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
-        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
-        [DllImport("user32.dll", EntryPoint = "GetWindowRect")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
-        const int SWP_SHOWWINDOW = 0x0040;
+       
         public struct Rect
         {
             public int Left { get; set; }
@@ -383,6 +379,32 @@ namespace MusicManager
         {
             //throw new NotImplementedException();
         }
+
+        private void TextBox_MusicFileTypesInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void TextBox_MusicFileTypesInput_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SetForegroundWindow(airPlayWndH);
+            System.Windows.Forms.SendKeys.SendWait("^% ");
+            //PostMessage(airPlayWndH, WM_KEYDOWN, VK_SPACE, 0);
+            //PostMessage(airPlayWndH, WM_KEYUP, VK_SPACE, 0);
+        }
+
+        [DllImport("user32.dll", EntryPoint = "SetForegroundWindow")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll", EntryPoint = "PostMessage")]
+        public static extern int PostMessage(IntPtr hWnd, UInt32 Msg, Int32 wParam, Int32 lParam);
+        [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+        public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
+        [DllImport("user32.dll", EntryPoint = "GetWindowRect")]
+        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+        public const Int32 WM_KEYDOWN = 0x0100;
+        public const Int32 WM_KEYUP = 0x101;
+        public const Int32 VK_SPACE = 0x20;
+        const int SWP_SHOWWINDOW = 0x0040;
     }
 
     public class DataGridItem
@@ -392,4 +414,6 @@ namespace MusicManager
         public string album{ get; set; }
         public string duration{ get; set; }
     }
+
+
 }
