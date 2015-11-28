@@ -32,6 +32,8 @@ namespace MusicManager
         private string localListFile = @"E:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
         private string systemConfig = @"E:\备份\难得的软件\AIRPLAY_CONFIG\SYSTEM\CONFIG";
         Process airPlayProcess = null;
+        WindowState lastState = WindowState.Normal;
+        WindowState currState = WindowState.Normal;
         IntPtr airPlayWndH;
         IntPtr mainwinWndH;
         Thread updatePosThread;
@@ -48,9 +50,15 @@ namespace MusicManager
             this.KeyDown += MainWindow_KeyDown;
             this.Closed += MainWindow_Closed;
             mainwinWndH = Process.GetCurrentProcess().MainWindowHandle;
+            this.StateChanged += MainWindow_StateChanged;
             updatePosThread = new Thread(updateAirplayPos);
             updatePosThread.Start();
             //鼠标右键菜单 打开fileExplorer,系统默认
+        }
+
+        void MainWindow_StateChanged(object sender, EventArgs e)
+        {
+            currState = this.WindowState;
         }
 
         void updateAirplayPos()
@@ -60,8 +68,27 @@ namespace MusicManager
                 //Thread.Sleep(0);
                 if ((airPlayProcess != null) && (!airPlayProcess.HasExited))
                 {
-                    GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
-                    SetWindowPos(airPlayWndH, 0, myRect.Left+5, myRect.Bottom-10, myRect.Right-myRect.Left-10, 100, SWP_SHOWWINDOW);
+                    if(currState!=lastState)
+                    {
+                        lastState = currState;
+                        switch (currState)
+                        {
+                            case WindowState.Minimized:
+                                ShowWindowAsync(airPlayWndH, SW_SHOWMINIMIZED);
+                                break;
+                            case WindowState.Maximized:
+                                ShowWindowAsync(airPlayWndH, SW_SHOWMINIMIZED);
+                                break;
+                            case WindowState.Normal:
+                                ShowWindowAsync(airPlayWndH, SW_SHOWNORMAL);
+                                break;
+                        }
+                    }
+                    if (WindowState.Normal == currState)
+                    {
+                        GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
+                        SetWindowPos(airPlayWndH, 0, myRect.Left + 5, myRect.Bottom - 10, myRect.Right - myRect.Left - 10, 100, SWP_SHOWWINDOW);
+                    }
                 }
             }
 
@@ -401,6 +428,12 @@ namespace MusicManager
         public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
         [DllImport("user32.dll", EntryPoint = "GetWindowRect")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
+        [DllImport("user32.dll", EntryPoint = "ShowWindowAsync")]
+        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
+
+        private const int SW_SHOWNORMAL = 1;
+        private const int SW_SHOWMINIMIZED = 2;
+        private const int SW_SHOWMAXIMIZED = 3;
         public const Int32 WM_KEYDOWN = 0x0100;
         public const Int32 WM_KEYUP = 0x101;
         public const Int32 VK_SPACE = 0x20;
