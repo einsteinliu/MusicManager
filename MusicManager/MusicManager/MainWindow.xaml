@@ -14,7 +14,7 @@
 
         <TreeView Grid.Column="0" Grid.Row="0" 
                   x:Name="FolderTreeView" 
-                  Margin="10,10,5,10">
+                  Margin="10,10,5.4,10.4">
             <TreeView.ContextMenu>
                 <ContextMenu x:Uid="File Explorer">
                     <MenuItem Header="Add folder" Click="MenuItem_AddFolder_Click"></MenuItem>

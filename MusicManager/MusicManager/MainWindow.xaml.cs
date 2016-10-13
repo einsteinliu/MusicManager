@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Tools;
@@ -29,8 +22,8 @@ namespace MusicManager
         private Dictionary<CheckBox, DirectoryInfo> nodesDir = new Dictionary<CheckBox, DirectoryInfo>();
         private SteinFolders steinFolder = new SteinFolders();
         private SteinAirPlay steinAirPlay = new SteinAirPlay();
-        private string localListFile = @"E:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
-        private string systemConfig = @"E:\备份\难得的软件\AIRPLAY_CONFIG\SYSTEM\CONFIG";
+        private string localListFile = @"F:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
+        private string systemConfig = @"F:\备份\难得的软件\AIRPLAY_CONFIG\SYSTEM\CONFIG";
         Process airPlayProcess = null;
         WindowState lastState = WindowState.Normal;
         WindowState currState = WindowState.Normal;
@@ -65,7 +58,7 @@ namespace MusicManager
         {
             while (true)
             {
-                //Thread.Sleep(0);
+                Thread.Sleep(100);
                 if ((airPlayProcess != null) && (!airPlayProcess.HasExited))
                 {
                     if(currState!=lastState)
@@ -377,7 +370,7 @@ namespace MusicManager
             if (airPlayProcess == null)
             {
                 GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
-                string airplay = @"E:\备份\难得的软件\AIRPLAY.exe";
+                string airplay = @"F:\备份\难得的软件\AIRPLAY.exe";
                 airPlayProcess = Process.Start(airplay);
                 System.Threading.Thread.Sleep(1000);
                 airPlayWndH = airPlayProcess.MainWindowHandle;
