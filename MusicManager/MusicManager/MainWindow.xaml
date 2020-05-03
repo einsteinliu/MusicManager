@@ -4,8 +4,8 @@
         Title="MusicManager" Height="500" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="13*"/>
-            <ColumnDefinition Width="22*"/>
+            <ColumnDefinition Width="430*"/>
+            <ColumnDefinition Width="363*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="425*"/>
@@ -14,7 +14,7 @@
 
         <TreeView Grid.Column="0" Grid.Row="0" 
                   x:Name="FolderTreeView" 
-                  Margin="10,10,5.4,10.4">
+                  Margin="10,10,10.4,10.4">
             <TreeView.ContextMenu>
                 <ContextMenu x:Uid="File Explorer">
                     <MenuItem Header="Add folder" Click="MenuItem_AddFolder_Click"></MenuItem>
@@ -22,14 +22,16 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <DataGrid Name="Playlist"
-                  Grid.Column="1" Grid.Row="0" 
-                  Margin="5,10,10,10" 
-                  MinWidth="483" 
+        <DataGrid Name="Playlist" Grid.Row="0" 
+                  Margin="9.6,10,6.6,10.4" 
+                  MinWidth="200" 
                   MinHeight="349"
+                  BorderThickness="1"
+                  BorderBrush="{Binding VerticalGridLinesBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                  CanUserResizeColumns="True" SelectionChanged="Playlist_SelectionChanged" Grid.Column="1"
                   />
         <TextBox x:Name="TextBox_MusicFileTypesInput" 
-                 Margin="10,0,5,10" 
+                 Margin="10,0,5.4,10.4" 
                  Height="27" 
                  TextWrapping="Wrap" 
                  Text="ape, cue, mp3" 
@@ -42,7 +44,7 @@
                 x:Name="buttonOpenMusic" 
                 Content="AirPlay" 
                 Height="27" 
-                Margin="5,0,10,10" 
+                Margin="4.6,0,9.6,10.4" 
                 VerticalAlignment="Bottom" Click="buttonOpenMusic_Click" Grid.Row="1" 
                 />
     </Grid>

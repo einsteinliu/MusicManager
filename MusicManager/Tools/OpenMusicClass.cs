@@ -43,7 +43,7 @@ namespace Tools
         public void test()
         {
             string folder;
-            string playHistoryPath = @"F:\music\AIRPLAY_CONFIG\LOCAL\audition.locallist";
+            string playHistoryPath = @"AIRPLAY_CONFIG\LOCAL\1588462501.locallist";
             folder = getFolder();
             clearPlayHistory(playHistoryPath);
             openMusic(folder);
@@ -52,7 +52,7 @@ namespace Tools
 
         public string getFolder()
         {
-            string folder = @"F:\music\Bach\Bach.-.[Goldberg.Variations(Walcha.EMI.Angle)].专辑.(Flac)";
+            string folder = @"E:\SyncFromLaptop\Mozart.-.[Complete.Edition.Vol.4.-.Piano.Concertos.].专辑.(APE)\CD1";
             Console.WriteLine("Open the folder: " + folder);
             return folder;
         }
@@ -71,7 +71,7 @@ namespace Tools
         public void openMusic(string folder)
         {
             string filepath = "\"" + folder + "\"";
-            Process pro = Process.Start(@"F:\music\AIRPLAY.exe", folder);
+            Process pro = Process.Start(@"AIRPLAY.exe", folder);
             Thread.Sleep(800);
             pro.Close();
         }

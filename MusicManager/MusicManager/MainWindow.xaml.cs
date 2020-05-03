@@ -22,8 +22,8 @@ namespace MusicManager
         private Dictionary<CheckBox, DirectoryInfo> nodesDir = new Dictionary<CheckBox, DirectoryInfo>();
         private SteinFolders steinFolder = new SteinFolders();
         private SteinAirPlay steinAirPlay = new SteinAirPlay();
-        private string localListFile = @"F:\备份\难得的软件\AIRPLAY_CONFIG\LOCAL\audition.locallist";
-        private string systemConfig = @"F:\备份\难得的软件\AIRPLAY_CONFIG\SYSTEM\CONFIG";
+        private string localListFile = @"AIRPLAY_CONFIG\LOCAL\1588462501.locallist";
+        private string systemConfig = @"AIRPLAY_CONFIG\SYSTEM\CONFIG";
         Process airPlayProcess = null;
         WindowState lastState = WindowState.Normal;
         WindowState currState = WindowState.Normal;
@@ -370,7 +370,7 @@ namespace MusicManager
             if (airPlayProcess == null)
             {
                 GetWindowRect(Process.GetCurrentProcess().MainWindowHandle, ref myRect);
-                string airplay = @"F:\备份\难得的软件\AIRPLAY.exe";
+                string airplay = @"AIRPLAY.exe";
                 airPlayProcess = Process.Start(airplay);
                 System.Threading.Thread.Sleep(1000);
                 airPlayWndH = airPlayProcess.MainWindowHandle;
@@ -431,6 +431,11 @@ namespace MusicManager
         public const Int32 WM_KEYUP = 0x101;
         public const Int32 VK_SPACE = 0x20;
         const int SWP_SHOWWINDOW = 0x0040;
+
+        private void Playlist_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 
     public class DataGridItem
