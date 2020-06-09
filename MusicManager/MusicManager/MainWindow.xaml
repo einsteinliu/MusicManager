@@ -4,8 +4,10 @@
         Title="MusicManager" Height="500" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="430*"/>
-            <ColumnDefinition Width="363*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="425*"/>
@@ -22,30 +24,33 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-        <DataGrid Name="Playlist" Grid.Row="0" 
-                  Margin="9.6,10,6.6,10.4" 
+        
+        <GridSplitter Grid.Row="0" Grid.Column="1" Width="3" HorizontalAlignment="Stretch"></GridSplitter>
+        
+        <DataGrid Name="Playlist" 
+                  Grid.Row="0" Grid.Column="2"
+                  Margin="9.6,10,0,10.4" 
                   MinWidth="200" 
                   MinHeight="349"
                   BorderThickness="1"
                   BorderBrush="{Binding VerticalGridLinesBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
-                  CanUserResizeColumns="True" SelectionChanged="Playlist_SelectionChanged" Grid.Column="1"
+                  CanUserResizeColumns="True" SelectionChanged="Playlist_SelectionChanged" 
                   />
-        <TextBox x:Name="TextBox_MusicFileTypesInput" 
-                 Margin="10,0,5.4,10.4" 
-                 Height="27" 
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="3" Height="27" LastChildFill="True">
+            <Button x:Name="buttonOpenMusic" 
+                Content="AirPlay" 
+                DockPanel.Dock="Right"
+                Width="200"
+                    Margin="10,0,0,0"
+                Click="buttonOpenMusic_Click"  
+                />
+            <TextBox x:Name="TextBox_MusicFileTypesInput" 
                  TextWrapping="Wrap" 
                  Text="ape, cue, mp3" 
-                 VerticalAlignment="Bottom" 
-                 Grid.Row="1" 
                  TextChanged="TextBox_MusicFileTypesInput_TextChanged" 
                  MouseDoubleClick="TextBox_MusicFileTypesInput_MouseDoubleClick"
                  />
-        <Button Grid.Column="1" 
-                x:Name="buttonOpenMusic" 
-                Content="AirPlay" 
-                Height="27" 
-                Margin="4.6,0,9.6,10.4" 
-                VerticalAlignment="Bottom" Click="buttonOpenMusic_Click" Grid.Row="1" 
-                />
+        </DockPanel>
+        
     </Grid>
 </Window>
